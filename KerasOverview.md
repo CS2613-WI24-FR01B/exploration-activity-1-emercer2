@@ -5,9 +5,9 @@
 
 
 **2. What is the package/library?**
-**\t• What purpose does it serve?**
-**\t• How do you use it?**
-**\t• This section should be the largest and go into lots of detail. Not everything here must**
+**  • What purpose does it serve?**
+    **• How do you use it?**
+**  • This section should be the largest and go into lots of detail. Not everything here must**
 be utilized in your sample program.
 3. What are the functionalities of the package/library?
 • Snippets of code and examples of output should be given here.
