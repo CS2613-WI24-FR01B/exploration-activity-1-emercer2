@@ -3,10 +3,14 @@
 
 **1. Which package/library does the sample program demonstrate?**
 
-The library that I chose to demonstrate is the Keras library.
+The library that I chose to demonstrate is the Keras library. Which is used to more easily implement neural networks in python.
 
 **2. How does someone run your program?**
 
+
+
 **3. What purpose does your program serve?**
+
+
 
 **4. What would be some sample input/output?**
