@@ -2,7 +2,9 @@
 # Exploration Activity 1
 
 **1. Which package/library does the sample program demonstrate?**
+
 The library that I chose to demonstrate is the Keras library.
+
 **2. How does someone run your program?**
 
 **3. What purpose does your program serve?**
