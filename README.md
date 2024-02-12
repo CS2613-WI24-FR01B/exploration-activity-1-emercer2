@@ -6,11 +6,22 @@
 The library that I chose to demonstrate is the Keras library. Which is used to more easily implement neural networks in python.
 
 **2. How does someone run your program?**
-
-
+<br>
+Have the KarasEA.py file stored in the same directory as titles.csv, then run KerasEA.py by using the command "python kerasEA.py". The program will prompt you to indicate the maximum number of movie genres you want predicted. Then it will prompt you to enter the title to the movie you want to predict genres for. 
 
 **3. What purpose does your program serve?**
-
-
+<br>
+The purpose of this program is to perdict the n most likely genres provided a movie title using multilabel classification through keras.
 
 **4. What would be some sample input/output?**
+<br>
+Sample Input:
+<br>
+2
+<br>
+American Horror Story
+<br><br>
+
+Sample Output:
+<br>
+[horror, documentation, comedy]
