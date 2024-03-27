@@ -91,7 +91,6 @@
 )
 
 (define (assessWin Plst row pos)
-  (println "restart")
   (cond
     [(>= (horizontalWin Plst row 0) 4) curPlayer]
     [(>= (verticalWin Plst 0 pos) 4) curPlayer]
@@ -114,7 +113,7 @@
   (cond
     [(equal? row 6) 0]
     [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (+ 1 (verticalWin Plst (+ row 1) pos))]
-    [else (+ 0 (verticalWin Plst (+row 1) pos))]
+    [else (+ 0 (verticalWin Plst (+ row 1) pos))]
   )
 )
 
