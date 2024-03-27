@@ -53,12 +53,12 @@
      (define pos x)
      (define row y)
      (cond
-       [(< x 90) (set! pos 0)]
-       [(and (< x 150) (> x 90)) (set! pos 1)]
-       [(and (< x 210) (> x 150)) (set! pos 2)]
-       [(and (< x 270) (> x 210)) (set! pos 3)]
-       [(and (< x 330) (> x 270)) (set! pos 4)]
-       [(and (< x 390) (> x 330)) (set! pos 5)]
+       [(<= x 90) (set! pos 0)]
+       [(and (<= x 150) (> x 90)) (set! pos 1)]
+       [(and (<= x 210) (> x 150)) (set! pos 2)]
+       [(and (<= x 270) (> x 210)) (set! pos 3)]
+       [(and (<= x 330) (> x 270)) (set! pos 4)]
+       [(and (<= x 390) (> x 330)) (set! pos 5)]
        [(> x 390) (set! pos 6)]
      )
      ;iterate throgh rows through rows to find next non-black token (set color) also changes cur player
@@ -91,6 +91,7 @@
 )
 
 (define (assessWin Plst row pos)
+  (println "restart")
   (cond
     [(>= (horizontalWin Plst row 0) 4) curPlayer]
     [(>= (verticalWin Plst 0 pos) 4) curPlayer]
@@ -105,7 +106,7 @@
   (cond
     [(equal? pos 7) 0]
     [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (+ 1 (horizontalWin Plst row (+ pos 1)))]
-    [else 0]
+    [else (+ 0 (horizontalWin Plst row (+ pos 1)))]
   )
 )
 
@@ -113,7 +114,7 @@
   (cond
     [(equal? row 6) 0]
     [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (+ 1 (verticalWin Plst (+ row 1) pos))]
-    [else 0]
+    [else (+ 0 (verticalWin Plst (+row 1) pos))]
   )
 )
 
