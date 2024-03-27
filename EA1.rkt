@@ -18,7 +18,7 @@
       (getPSetup 0 0 (world-pLst world))
       240 235
       (place-image 
-       (isosceles-triangle 30 300 "solid" "White")
+       (isosceles-triangle 30 300 "solid" curPlayer)
        (posn-x (world-indicator world))
        (posn-y (world-indicator world))
        (rectangle 470 445 "solid" "black"))
@@ -92,8 +92,8 @@
 
 (define (assessWin Plst row pos)
   (cond
-    [(>= (horizontalWin Plst row 0) 4) curPlayer]
-    [(>= (verticalWin Plst 0 pos) 4) curPlayer]
+    [(>= (horizontalWin Plst row 0 0) 4) curPlayer]
+    [(>= (verticalWin Plst 0 pos 0) 4) curPlayer]
     [(>= (rightDiagonalWin Plst row pos 0) 4) curPlayer]
     [(>= (leftDiagonalWin Plst row pos 0) 4) curPlayer]
     [(fullboard Plst 0 0) "Tie"]
@@ -101,19 +101,19 @@
   )
 )
 
-(define (horizontalWin Plst row pos)
+(define (horizontalWin Plst row pos counter)
   (cond
-    [(equal? pos 7) 0]
-    [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (+ 1 (horizontalWin Plst row (+ pos 1)))]
-    [else (+ 0 (horizontalWin Plst row (+ pos 1)))]
+    [(equal? pos 7) counter]
+    [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (+ 1 (horizontalWin Plst row (+ pos 1) (+ counter 1)))]
+    [else (+ 0 (horizontalWin Plst row (+ pos 1) 0))]
   )
 )
 
-(define (verticalWin Plst row pos)
+(define (verticalWin Plst row pos counter)
   (cond
-    [(equal? row 6) 0]
-    [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (+ 1 (verticalWin Plst (+ row 1) pos))]
-    [else (+ 0 (verticalWin Plst (+ row 1) pos))]
+    [(equal? row 6) counter]
+    [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (verticalWin Plst (+ row 1) pos (+ counter 1))]
+    [else (+ 0 (verticalWin Plst (+ row 1) pos 0))]
   )
 )
 
