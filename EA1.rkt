@@ -50,22 +50,28 @@
      (make-world (make-posn setx 20) (world-pLst world))
     ]
     [(string=? "button-up" event)
-     (define pos x)
-     (define row y)
      (cond
-       [(<= x 90) (set! pos 0)]
-       [(and (<= x 150) (> x 90)) (set! pos 1)]
-       [(and (<= x 210) (> x 150)) (set! pos 2)]
-       [(and (<= x 270) (> x 210)) (set! pos 3)]
-       [(and (<= x 330) (> x 270)) (set! pos 4)]
-       [(and (<= x 390) (> x 330)) (set! pos 5)]
-       [(> x 390) (set! pos 6)]
-     )
-     ;iterate throgh rows through rows to find next non-black token (set color) also changes cur player
-     (define newPlst (placePeice pos (world-pLst world) 0))
+     [(equal? win '())
+      (define pos x)
+      (define row y)
+      (cond
+        [(<= x 90) (set! pos 0)]
+        [(and (<= x 150) (> x 90)) (set! pos 1)]
+        [(and (<= x 210) (> x 150)) (set! pos 2)]
+        [(and (<= x 270) (> x 210)) (set! pos 3)]
+        [(and (<= x 330) (> x 270)) (set! pos 4)]
+        [(and (<= x 390) (> x 330)) (set! pos 5)]
+        [(> x 390) (set! pos 6)]
+      )
+      ;iterate throgh rows through rows to find next non-black token (set color) also changes cur player
+      (define newPlst (placePeice pos (world-pLst world) 0))
      
-     (make-world (make-posn setx 20) newPlst)
-    ]
+      (make-world (make-posn setx 20) newPlst)
+      ]
+     [else
+      (set! win '())
+      (make-world (make-posn 60 20) initialPLst)]
+    )]
     [else world]
   )
 )
@@ -94,8 +100,8 @@
   (cond
     [(>= (horizontalWin Plst row 0 0) 4) curPlayer]
     [(>= (verticalWin Plst 0 pos 0) 4) curPlayer]
-    [(>= (rightDiagonalWin Plst row pos 0) 4) curPlayer]
-    [(>= (leftDiagonalWin Plst row pos 0) 4) curPlayer]
+    [(>= (rightDiagonalWin Plst row pos 0 0) 4) curPlayer]
+    [(>= (leftDiagonalWin Plst row pos 0 0) 4) curPlayer]
     [(fullboard Plst 0 0) "Tie"]
     [else null]
   )
@@ -103,61 +109,63 @@
 
 (define (horizontalWin Plst row pos counter)
   (cond
+    [(equal? counter 4) 4]
     [(equal? pos 7) counter]
-    [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (+ 1 (horizontalWin Plst row (+ pos 1) (+ counter 1)))]
-    [else (+ 0 (horizontalWin Plst row (+ pos 1) 0))]
+    [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (horizontalWin Plst row (+ pos 1) (+ counter 1))]
+    [else (horizontalWin Plst row (+ pos 1) 0)]
   )
 )
 
 (define (verticalWin Plst row pos counter)
   (cond
+    [(equal? counter 4) 4]
     [(equal? row 6) counter]
     [(equal? (list-ref (list-ref Plst row) pos) curPlayer) (verticalWin Plst (+ row 1) pos (+ counter 1))]
-    [else (+ 0 (verticalWin Plst (+ row 1) pos 0))]
+    [else (verticalWin Plst (+ row 1) pos 0)]
   )
 )
 
-(define (rightDiagonalWin Plst row pos strtF)
+(define (rightDiagonalWin Plst row pos strtF counter)
   (cond
-    [(equal? pos 7) 0]
-    [(equal? row -1) 0]
+    [(equal? pos 7) counter]
+    [(equal? row -1) counter]
     [(equal? strtF 0)
      (cond
        [(and (not (or (equal? row 5) (equal? pos 0))) (equal? (list-ref (list-ref Plst (+ row 1)) (- pos 1)) curPlayer))
-           (+ 0 (rightDiagonalWin Plst (+ row 1) (- pos 1) strtF));move back one if room and that peice is curPlayer
+           (+ 0 (rightDiagonalWin Plst (+ row 1) (- pos 1) strtF counter));move back one if room and that peice is curPlayer
        ]
-       [else (+ 0 (rightDiagonalWin Plst row pos 1))];sets strtF to 1
+       [else (+ 0 (rightDiagonalWin Plst row pos 1 counter))];sets strtF to 1
      )
     ]
     [else
      (cond
        [(equal? (list-ref (list-ref Plst row) pos) curPlayer)
-        (+ 1 (rightDiagonalWin Plst (- row 1) (+ pos 1) strtF))
+        (rightDiagonalWin Plst (- row 1) (+ pos 1) strtF (+ counter 1))
         ]
-       [else 0]
+       [else counter]
       )
     ]
   )
 )
 
-(define (leftDiagonalWin Plst row pos strtF)
+(define (leftDiagonalWin Plst row pos strtF counter)
   (cond
-    [(equal? pos -1) 0]
-    [(equal? row -1) 0]
+    [(equal? pos -1) counter]
+    [(equal? row -1) counter]
     [(equal? strtF 0)
      (cond
        [(and (not (or (equal? row 5) (equal? pos 6))) (equal? (list-ref (list-ref Plst (+ row 1)) (+ pos 1)) curPlayer))
-           (+ 0 (leftDiagonalWin Plst (+ row 1) (+ pos 1) strtF));move back one if room and that peice is curPlayer
+           (leftDiagonalWin Plst (+ row 1) (+ pos 1) strtF counter);move back one if room and that peice is curPlayer
        ]
-       [else (+ 0 (leftDiagonalWin Plst row pos 1))];sets strtF to 1
+       [else (leftDiagonalWin Plst row pos 1 counter)];sets strtF to 1
      )
     ]
     [else
      (cond
        [(equal? (list-ref (list-ref Plst row) pos) curPlayer)
-        (+ 1 (leftDiagonalWin Plst (- row 1) (- pos 1) strtF))
+        (leftDiagonalWin Plst (- row 1) (- pos 1) strtF (+ 1 counter))
         ]
-       [else 0]
+       [else counter]
       )
     ]
   )
